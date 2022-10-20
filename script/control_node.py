@@ -1,0 +1,60 @@
+#! /usr/bin/env python
+# Import ROS.
+import rospy
+from gcsclient import GcsWebsocketReceiver
+from mission import exec_mission
+
+# Import the API.
+from iq_gnc.py_gnc_functions import *
+# To print colours (optional).
+from iq_gnc.PrintColours import *
+
+#arm = getattr(drone, "arm")
+
+def main():
+    # Initializing ROS node.
+    rospy.init_node("drone_control_over_network")
+
+    # Create an object for the API.
+    drone = gnc_api()
+
+    # Wait for FCU connection.
+    drone.wait4connect()
+    # Wait for the mode to be switched.
+    #drone.wait4start()
+
+    # Create local reference frame.
+    drone.initialize_local_frame()
+
+    gcscli = GcsWebsocketReceiver(
+        api_url="ws://localhost:8000/ws/robot/zangado/", 
+        headers={'X-DroneApiKey':"hOgtypH7.eQM8nQbEUNyQY5gPUQg0IG1WbuopENfz"},
+    )
+    rospy.loginfo(CGREEN2 + "Begin to receive commands." + CEND)
+    gcscli.start_receiver(
+        handlers = {
+            'arm'            : drone.arm, 
+            'takeoff'        : drone.takeoff,
+            'set_mode'       : drone.set_mode,
+            'set_destination': drone.set_destination,
+            'set_heading'    : drone.set_heading,
+            'land'           : drone.land,
+            'set_speed'      : drone.set_speed,
+            'exec_mission'   : exec_mission(drone)
+        }
+    )
+if __name__ == '__main__':
+    while True:
+        try:
+            main()
+        except KeyboardInterrupt:
+            print("Crtl-C getting out...")
+        except ConnectionRefusedError:
+            print("Connection Refused at server, retrying in 3 seconds...")
+            rospy.sleep(3)
+            continue
+        except BrokenPipeError:
+            print("Broken Pipe, retying...")
+            rospy.sleep(0.5)
+            continue
+
