@@ -1,9 +1,9 @@
 import websocket, json
 import threading, time
 
-class GcsWebsocketClient:
+class ccsWebsocketClient:
     """
-    GCS Client Interface
+    ccs Client Interface
 
     """
 
@@ -22,9 +22,9 @@ class GcsWebsocketClient:
         self.ws.send('%s' % message)
 
 
-class GcsWebsocketReceiver:
+class ccsWebsocketReceiver:
     """
-    GCS Client Interface
+    ccs Client Interface
 
     """
 

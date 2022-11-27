@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # Import ROS.
 import rospy
-from gcsclient import GcsWebsocketReceiver
+from ccsclient import ccsWebsocketReceiver
 from mission import exec_mission
 import os
 
@@ -27,12 +27,12 @@ def main():
     # Create local reference frame.
     drone.initialize_local_frame()
 
-    gcscli = GcsWebsocketReceiver(
+    ccscli = ccsWebsocketReceiver(
         api_url="ws://{}:8000/ws/robot/zangado/".format(os.getenv(key='API_URL')), 
         headers={'X-DroneApiKey':os.getenv(key='DRONE_API_KEY')},
     )
     rospy.loginfo(CGREEN2 + "Begin to receive commands." + CEND)
-    gcscli.start_receiver(
+    ccscli.start_receiver(
         handlers = {
             'arm'            : drone.arm, 
             'takeoff'        : drone.takeoff,
