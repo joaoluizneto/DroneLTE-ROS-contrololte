@@ -28,7 +28,10 @@ def main():
     drone.initialize_local_frame()
 
     ccscli = ccsWebsocketReceiver(
-        api_url="ws://{}/ws/robot/zangado/".format(os.getenv(key='API_URL')), 
+        api_url="ws://{}/ws/robot/zangado/".format(
+			api_url=os.getenv(key='API_URL'),
+			drone_name=os.getenv(key='DRONE_NAME')
+		),
         headers={'X-DroneApiKey':os.getenv(key='DRONE_API_KEY')},
     )
     rospy.loginfo(CGREEN2 + "Begin to receive commands." + CEND)
