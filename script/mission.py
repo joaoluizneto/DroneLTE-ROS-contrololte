@@ -1,3 +1,4 @@
+import os
 import csv
 import time
 import requests
@@ -114,7 +115,7 @@ class QGroundControlWP(WaypointFile):
 def execute_mission(drone, mission_name='teste'):
     print(f"getting {mission_name}")
     wpreader = QGroundControlWP()
-    r = requests.get(f'http://127.0.0.1:8000/api/v1/missions/missions/?missionName={mission_name}', headers={'Authorization': 'Api-Key hOgtypH7.eQM8nQbEUNyQY5gPUQg0IG1WbuopENfz'})    
+    r = requests.get(f'http://127.0.0.1:8000/api/v1/missions/missions/?missionName={mission_name}', headers={'Authorization': 'Api-Key {}'.format(os.getenv(key='API_URL'))})    
     if len(r.json()):
         mission = r.json()[0]
         missionFile = requests.get(mission['missionFile'], headers={'Authorization': 'Api-Key hOgtypH7.eQM8nQbEUNyQY5gPUQg0IG1WbuopENfz'}).text
