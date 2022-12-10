@@ -27,7 +27,7 @@ def main():
     # Create local reference frame.
     drone.initialize_local_frame()
 
-    ccscli = ccsWebsocketClient(
+    ccscli = ccsWebsocketReceiver(
         api_url="ws://{api_url}/ws/robot/{drone_name}/".format(
 			api_url=os.getenv(key='API_URL'),
 			drone_name=os.getenv(key='DRONE_NAME')
